@@ -20,6 +20,15 @@ typedef struct	s_search
 	char *the_list;
 }				t_search;
 
+typedef struct 	s_path
+{
+	char 	*name;
+	int 	ants;
+	int		is_start;
+	int 	is_end;
+	int		end_ants;
+}				t_path;
+
 t_rooms *init_rooms(t_rooms *room, int room_count)
 {
 	int x;
@@ -284,7 +293,6 @@ t_search check_end(t_rooms *room, t_rooms start_room, t_search search, int room_
 				{
 					search.found_end = 1;
 					search.the_list = ft_strjoin(search.the_list, room[y].name);
-					
 					return (search);
 				}
 			}
@@ -360,7 +368,7 @@ t_search find_path(t_rooms *room, int room_count)
 
 }
 
-char *find_end(t_search search)
+int path_length(t_search search)
 {
 	char **split;
 	int x;
@@ -372,31 +380,92 @@ char *find_end(t_search search)
 	{
 		x++;
 	}
+	return (x);
+}
+
+t_path *make_path(t_search search)
+{
+	t_path *path;
+
+	path = malloc(sizeof(t_path) * path_length(search));
+
+	char **split;
+	int x;
+
+	x = 0;
+	split = ft_strsplit(search.the_list, ' ');
+	while (split[x])
+	{
+		path[x].name = malloc(sizeof(char *) * ft_strlen(split[x]));
+		ft_strcpy(path[x].name, split[x]);
+		if (x == 0)
+		{
+			path[x].is_start = 1;
+		}
+		else
+		{
+			path[x].is_start = 0;
+			path[x].ants  = 0;
+			path[x].is_end = 0;
+		}
+		printf("%s -", path[x].name);
+		x++;
+	}
 	x--;
-	return (split[x]);
+	path[x].is_end = 1;
+	printf("\n");
+	return (path);
 }
 
 void send_ants(t_search search, int ants)
 {
-	char **split;
 	int x;
 	int y;
-
+	int length;
+	int start_ant;
+	int ant_count;
+	t_path *path;
+	length = path_length(search);
 	y = 0;
 	x = 0;
-	split = ft_strsplit(search.the_list, ' ');
+	start_ant = 0;
+	ant_count = ants;
+	path = make_path(search);
 
-	while (x < ants)
-	{	
-		y = 0;
-		while (split[y])
+	while (path[length - 1].ants < ants)
+	{
+		start_ant++;
+		
+		if (ant_count <= 0)
 		{
-			printf("L%d-%s\n", x, split[y]);
+			start_ant = 0;
+		}
+
+		while (path[x].is_end != 1)
+			x++;
+		while(path[x].is_start == 0)
+		{
+			if (path[x - 1].ants != 0)
+			{
+				path[x].ants = path[x - 1].ants;
+				path[x - 1].ants = 0;
+			}
+			x--;
+		}
+		y = 1;
+		while(y < length)
+		{
+			if (path[y].ants)
+				printf("L%d-%s ", path[y].ants, path[y].name);
 			y++;
 		}
-		x++;
+		printf("\n");
+		ant_count--;
+		path[x].ants = start_ant;
+
 	}
-}
+}	
+
 
 int main(int ac, char **av)
 {
@@ -424,10 +493,9 @@ int main(int ac, char **av)
 			room = alloc_rooms(room, room_count);
 			room = get_link_names(av[1], room, room_count);
 			search = find_path(room, room_count);	
-			search.end_name = find_end(search);
 			send_ants(search, ants);
 
-
+			//ft_printf("%s\n", search.the_list);
 			
 
 			//print_room(room, room_count);
