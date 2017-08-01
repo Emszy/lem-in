@@ -29,6 +29,12 @@ typedef struct 	s_path
 	int		end_ants;
 }				t_path;
 
+int error_master5000(char *message)
+{
+	ft_putstr(message);
+	exit(-1);
+}
+
 t_rooms *init_rooms(t_rooms *room, int room_count)
 {
 	int x;
@@ -80,17 +86,29 @@ void print_room(t_rooms *room, int room_count)
 	}
 }
 
-int get_ant_count(char *av)
+int get_ant_count(char *av, int src_flag)
 {
 	int fd;
 	int ants;
 	char *line;
 
 	ants = 0;
-	fd = open(av, O_RDONLY);
-	get_next_line(fd, &line);
+	fd = 0;
+	if (src_flag == 1)
+	{
+		get_next_line(0, &line);
+	}
+	else
+	{
+		fd = open(av, O_RDONLY);
+		get_next_line(fd, &line);
+		close(fd);
+	}
+	
 	ants = ft_atoi(line);
-	close(fd);
+	if (ants <= 0)
+		error_master5000("no ants");
+
 	return (ants);
 }
 
@@ -339,9 +357,6 @@ t_search search_path(t_rooms *room, t_rooms start_room, t_search search, int roo
 	return (search);
 }
 
-
-
-
 t_search find_path(t_rooms *room, int room_count)
 {
 	t_rooms start_room;
@@ -471,39 +486,39 @@ int main(int ac, char **av)
 {
 	int ants;
 	int room_count;
-	int x;
+	int src_flag;
 	t_rooms *room;
 	t_search search;
+	char *filename;
 
-
+	src_flag = 0;
 	room = NULL;
 	room_count = 0;
-	x = 0;
-
-	if (ac > 1)
+	if (ac > 0)
 	{
 		if (av[1])
 		{
-			ants = get_ant_count(av[1]);
-			room_count = get_room_count(av[1]);
+			src_flag = 0;
+			filename = malloc(sizeof(char*) * ft_strlen(av[1]));
+			filename = av[1];
+		}
+		else
+		{
+			src_flag = 1;
+			filename = av[1];
+		}
+			ants = get_ant_count(filename, src_flag);
+			room_count = get_room_count(filename);
 			room = (t_rooms *)malloc(sizeof(t_rooms) * room_count);
+			if (!room)
+				error_master5000("NO SPACE");
 			room = init_rooms(room, room_count);
-			room = save_rooms(av[1], room, room_count);
-			room = get_link_count(av[1], room, room_count);
+			room = save_rooms(filename, room, room_count);
+			room = get_link_count(filename, room, room_count);
 			room = alloc_rooms(room, room_count);
-			room = get_link_names(av[1], room, room_count);
+			room = get_link_names(filename, room, room_count);
 			search = find_path(room, room_count);	
 			send_ants(search, ants);
-
-			//ft_printf("%s\n", search.the_list);
-			
-
-			//print_room(room, room_count);
-				
 		}
-	}
-	
-
-
 	return 0;
 }

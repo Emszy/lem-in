@@ -3,10 +3,12 @@ NAME = lem-in
 FLAGS = -Wall -Wextra -Werror -g
 
 SRC =	\
-		lem-in.c
+		lem-in.c \
+		str.c
 
 INPUT_OBJ =	\
-		lem-in.o
+		lem-in.o \
+		str.o
 		
 OBJ = $(patsubst %.c,%.o,$(addprefix ./, $(SRC)))
 
