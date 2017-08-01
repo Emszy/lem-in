@@ -15,5 +15,9 @@
 
 # include "libft/libft.h"
 
+char	*ft_strmake(char *string);
+char	**malloc_list(char *string);
+char	**ft_addstr(char **list, char *string, int size);
+
 
 #endif
