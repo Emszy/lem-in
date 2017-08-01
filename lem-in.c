@@ -29,10 +29,30 @@ typedef struct 	s_path
 	int		end_ants;
 }				t_path;
 
+typedef struct s_2d_ptr
+{
+	char	**data;
+	int		length;
+}				t_2d_ptr;
+
 int error_master5000(char *message)
 {
 	ft_putstr(message);
 	exit(-1);
+}
+
+int check_for_letters(char *string)
+{
+	int x;
+
+	x = 0;
+	while (string[x])
+	{
+		if (!ft_isdigit(string[x]))
+			error_master5000("letter in the num");
+		x++;
+	}
+	return (1);
 }
 
 t_rooms *init_rooms(t_rooms *room, int room_count)
@@ -86,145 +106,101 @@ void print_room(t_rooms *room, int room_count)
 	}
 }
 
-int get_ant_count(char *av)
+int get_ant_count(t_2d_ptr file)
 {
-	int fd;
 	int ants;
-	char *line;
 	int x;
 
 	x = 0;
 	ants = 0;
-	fd = 0;
-	fd = open(av, O_RDONLY);
-	get_next_line(fd, &line);
-	while(line[x] == '#')
-		get_next_line(fd, &line);
-	close(fd);
-	while (line[x])
-	{
-		if (!ft_isdigit(line[x]))
-			error_master5000("FIRSTLINEERROR");
+	while(file.data[x][0] == '#')
 		x++;
-	}
-	ants = ft_atoi(line);
+	check_for_letters(file.data[x]);
+	ants = ft_atoi(file.data[x]);
 	if (ants <= 0)
 		error_master5000("no ants");
-
 	return (ants);
 }
 
-int get_room_count(char *av)
+int get_room_count(t_2d_ptr file)
 {
-	char *line;
 	int room_count;
-	int fd;
-
-	fd = open(av, O_RDONLY);
-	room_count = 0;
-	get_next_line(fd, &line);
-	get_next_line(fd, &line);
-	while (get_next_line(fd, &line))
-	{
-		if (line[0] == '#' && line[1] == '#')
-		{
-			get_next_line(fd, &line);
-			if (!ft_strchr(line, ' '))
-				error_master5000("NO START");
-		}
-		if (line[0] == '#')
-			get_next_line(fd, &line);
-		if (ft_strchr(line, ' '))
-			room_count++;
-	}
-	close (fd);
-	return (room_count);
-}
-
-int check_for_letters(char *string)
-{
 	int x;
 
 	x = 0;
-	while (string[x])
+	room_count = 0;
+	while (x < file.length)
 	{
-		if (!ft_isdigit(string[x]))
-			error_master5000("letter in the num");
+		if (ft_strcmp(file.data[x], "##start") == 0 || ft_strcmp(file.data[x], "##end") == 0)
+		{
+			x++;
+			if (!ft_strchr(file.data[x], ' '))
+				error_master5000("NO START");
+		}
+		while (file.data[x][0] == '#')
+			x++;
+		if (ft_strchr(file.data[x], ' '))
+			room_count++;
 		x++;
 	}
-	return (1);
+	return (room_count);
 }
 
-t_rooms *save_rooms(char *av, t_rooms *room, int room_count)
+t_rooms *save_rooms(t_2d_ptr file, t_rooms *room)
 {
-	char *line;
-	char **split;
-	int fd;
+
 	int x;
 	int y;
 	int has_start;
 	int has_finish;
-
+	char **split;
 
 	has_finish = 0;
 	has_start = 0;
 	x = 0;
 	y = 0;
-	fd = open(av, O_RDONLY);
-	get_next_line(fd, &line);
-	while (get_next_line(fd, &line))
+	while (y < file.length)
 	{
-		if (x < room_count)
+			if (ft_strcmp(file.data[y], "##start") == 0)
+			{
+				has_start = 1;
+				y++;
+				room[x].start = 1;
+			}
+			if (ft_strcmp(file.data[y], "##end") == 0)
+			{
+				has_finish = 1;
+				y++;
+				room[x].end = 1;
+			}
+			while (file.data[y][0] == '#')
+				y++;	
+		if (ft_strchr(file.data[y], ' '))
 		{
-			if (line[0] == '#')
-			{
-				if (ft_strcmp(line, "##start") == 0)
-				{
-					room[x].start = 1;
-					has_start = 1;
-				}
-				if (ft_strcmp(line, "##end") == 0)
-				{
-					room[x].end = 1;
-					has_finish = 1;
-				}
-				get_next_line(fd, &line);
-			}
-			if (ft_strchr(line, ' '))
-			{
-				split = ft_strsplit(line, ' ');
-				if (split[0][0] == 'L')
-					error_master5000("ERROR");
-				check_for_letters(split[1]);
-				check_for_letters(split[2]);
-				if (!split[0] || !split[1] || !split[2] || split[3])
-					error_master5000("NO space ERROR");
-				room[x].name = malloc(sizeof(char*) * ft_strlen(split[0]) + 1);	
-				ft_strcpy(room[x].name, split[0]);
-				room[x].name[ft_strlen(room[x].name)] = '\0';
-				room[x].x = ft_atoi(split[1]);
-				room[x].y = ft_atoi(split[2]);
-				x++;
-			}
+			split = ft_strsplit(file.data[y], ' ');
+			check_for_letters(split[1]);
+			check_for_letters(split[2]);
+			room[x].name = ft_strmake(split[0]);
+			room[x].x = ft_atoi(split[1]);
+			room[x].y = ft_atoi(split[2]);
+			x++;
 		}
+		y++;
 	}
-	close (fd);
 	if (has_finish == 0 || has_start == 0)
 		error_master5000("NO START  || FINISH ERROR");
 	return (room);
 }
 
-t_rooms *get_link_count(char *av, t_rooms *room, int room_count)
+t_rooms *get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 {
 
 	char *line;
-	int fd;
 	char **split;
 	int x;
+	int y = 1;
 
-	fd = open(av, O_RDONLY);
-	get_next_line(fd, &line);
-	while (get_next_line(fd, &line))
+	while (y < file.length)
 	{
 		x = 0;
 		if (ft_strchr(line, '-'))
@@ -240,10 +216,9 @@ t_rooms *get_link_count(char *av, t_rooms *room, int room_count)
 					room[x].links++;
 				x++;
 			}
-			
 		}
+		y++;
 	}
-	close (fd);
 	return (room);
 }
 
@@ -418,7 +393,6 @@ t_search find_path(t_rooms *room, int room_count)
 		x++;
 	}
 	search.the_list = malloc(sizeof(char*) * ft_strlen(start_room.name) + 1);
-
 	ft_strcpy(search.the_list, start_room.name);
 	search.the_list = ft_strjoin(search.the_list, " ");
 	search = search_path(room, start_room, search, room_count);
@@ -526,50 +500,45 @@ void send_ants(t_search search, int ants)
 	}
 }
 
-char *write_input(char** input, int size)
-{
-	int x;
-	int fd;
-	char *file;
-
-	x = 0;
-	file = ft_strmake("lemons.txt");
-	fd = open(file, O_CREAT | O_TRUNC| O_RDWR);
-
-
-	while (x < size)
-	{
-		ft_putstr(input[x]);
-		ft_putstr("\n");
-		ft_putstr_fd(input[x], fd);
-		ft_putstr_fd("\n", fd);
-		x++;
-	}
-	close (fd);
-	return (file);
-}
-
-char *save_input()
+t_2d_ptr save_input()
 {
 	char *line;
-	char **input;
-	char *file;
+	t_2d_ptr file;
 	int x;
+	int y;
 
+	y = 0;
 	x = 0;
-
 	while (get_next_line(0, &line))
 	{
 		if (ft_strcmp(line, "") == 0)
 			break;
-		input = ft_addstr(input, line, x);
+		file.data = ft_addstr(file.data, line, x);
 		x++;
 	}
-	file = write_input(input, x);
-	return (file);
+	file.length = x;
+	return (file);;
 }
 
+t_2d_ptr save_file(char *filename)
+{
+	char *line;
+	t_2d_ptr file;
+	int fd;
+	int x;
+	int y;
 
+	x = 0;
+	y = 0;
+	fd = open(filename, O_RDONLY);
+	while (get_next_line(fd, &line))
+	{
+		file.data = ft_addstr(file.data, line, x);
+		x++;
+	}
+	file.length = x;
+	return (file);
+}
 
 int main(int ac, char **av)
 {
@@ -578,29 +547,48 @@ int main(int ac, char **av)
 	t_rooms *room;
 	t_search search;
 	char *filename;
+	t_2d_ptr file;
 
 	room = NULL;
 	room_count = 0;
 	if (ac > 0)
 	{
 		if (av[1])
-			filename = ft_strmake(av[1]);
+		{
+			file = save_file(av[1]);
+		}
 		else
-			filename = save_input();
-			ants = get_ant_count(filename);
+			file = save_input();
+			ants = get_ant_count(file);
+			filename = ft_strmake(av[1]);
 
-			room_count = get_room_count(filename);
+
+			room_count = get_room_count(file);
 			if (room_count <= 1)
 				error_master5000("ERROR");
 			printf("rooms:%d\n", room_count);
 			room = (t_rooms *)malloc(sizeof(t_rooms) * room_count);
 			if (!room)
 				error_master5000("NO SPACE");
+			ft_putstr("initializing rooms\n");
 			room = init_rooms(room, room_count);
-			room = save_rooms(filename, room, room_count);
-			room = get_link_count(filename, room, room_count);
+			ft_putstr("saving rooms\n");
+			room = save_rooms(file, room);
+			int x = -1;
+			while (++x < room_count)
+			{
+				printf("%s\n", room[x].name);
+				printf("START:%d\n", room[x].start);
+				printf("END: %d\n", room[x].end);
+			}
+
+			ft_putstr("getting links\n");
+			room = get_link_count(file, room, room_count);
+			ft_putstr("allocating rooms\n");
 			room = alloc_rooms(room, room_count);
+			ft_putstr("getting links names\n");
 			room = get_link_names(filename, room, room_count);
+			ft_putstr("finding path\n");
 			search = find_path(room, room_count);	
 			send_ants(search, ants);
 		}
