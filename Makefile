@@ -4,11 +4,15 @@ FLAGS = -Wall -Wextra -Werror -g
 
 SRC =	\
 		lem-in.c \
-		str.c
+		str.c \
+		misc.c \
+		save_rooms.c
 
 INPUT_OBJ =	\
 		lem-in.o \
-		str.o
+		str.o \
+		misc.o \
+		save_rooms.o
 		
 OBJ = $(patsubst %.c,%.o,$(addprefix ./, $(SRC)))
 
