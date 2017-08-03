@@ -6,13 +6,19 @@ SRC =	\
 		lem-in.c \
 		str.c \
 		misc.c \
-		save_rooms.c
+		save_rooms.c \
+		save_links.c \
+		find_path.c \
+		send_ant.c
 
 INPUT_OBJ =	\
 		lem-in.o \
 		str.o \
 		misc.o \
-		save_rooms.o
+		save_rooms.o \
+		save_links.o \
+		find_path.o \
+		send_ant.o
 		
 OBJ = $(patsubst %.c,%.o,$(addprefix ./, $(SRC)))
 

@@ -52,7 +52,9 @@ typedef struct s_2d_ptr
 	int		has_finish;
 }				t_2d_ptr;
 
+void		free_2d_char(char **data, int length);
 char		*ft_strmake(char *string);
+t_rooms		*alloc_rooms(t_rooms *room, int room_count);
 char		**malloc_list(char *string);
 char		**ft_addstr(char **list, char *string, int size);
 int			error_master5000(char *message);
@@ -64,6 +66,20 @@ int			get_room_count(t_2d_ptr file);
 t_rooms		*check_for_hash(t_2d_ptr *file, t_rooms *room);
 t_rooms		*room_info(char** split, t_rooms *room, int x);
 t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room);
+t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count);
+t_rooms		check_link(t_rooms *room, char** split, int x);
+t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count);
+int			not_on_the_list(char *the_list, char *name);
+t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_count);
+t_search	search_path(t_rooms *room, t_rooms start_room, t_search search, int room_count);
+t_search	find_path(t_rooms *room, int room_count);
+int 		path_length(t_search search);
+t_path 		*make_path(t_search search);
+t_path 		*move_ant(t_path *path, int x);
+void 		show_ant_path(t_path *path, int length);
+void		send_ants(t_search search, int ants);
+
+
 
 
 

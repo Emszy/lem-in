@@ -7,6 +7,16 @@ int error_master5000(char *message)
 	exit(-1);
 }
 
+t_rooms		*alloc_rooms(t_rooms *room, int room_count)
+{
+	int		x;
+
+	x = -1;
+	while (++x < room_count)
+		room[x].connections =  (char**)malloc(sizeof(char*) * room[x].links);
+	return (room);
+}
+
 int check_for_letters(char *string)
 {
 	int x;
