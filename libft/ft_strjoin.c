@@ -16,9 +16,11 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	char *new;
 
-	if (!(new = (char*)malloc(sizeof(char*) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	new = (char*)malloc(sizeof(new) * (ft_strlen(s1) + ft_strlen(s2)));
+	if (!new)
 		return (NULL);
 	ft_strcpy(new, s1);
 	new = ft_strcat(new, s2);
+	new[ft_strlen(new)] = '\0';
 	return (new);
 }

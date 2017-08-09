@@ -1,16 +1,14 @@
 #include "lem-in.h"
 
-int			not_on_the_list(char *the_list, char *name)
+int			not_on_the_list(t_search search, char *name)
 {
-	char	**split;
 	int		x;
 
 	x = -1;
-	split = ft_strsplit(the_list, ' ');
 
-	while (split[++x])
+	while (++x < search.list_len)
 	{
-		if (ft_strcmp(split[x], name) == 0)
+		if (ft_strcmp(search.the_list[x], name) == 0)
 			return (0);
 	}
 	return (1);
@@ -32,7 +30,8 @@ t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_
 				if (room[y].end == 1 || start_room.end == 1)
 				{
 					search.found_end = 1;
-					search.the_list = ft_strjoin(search.the_list, room[y].name);
+					search.the_list = ft_addstr(search.the_list, room[y].name, search.list_len);
+					search.list_len++;
 					return (search);
 				}
 			}
@@ -55,12 +54,12 @@ t_search	search_path(t_rooms *room, t_rooms start_room, t_search search, int roo
 			{
 				if (search.found_end == 1)
 					return (search);
-				if(ft_strcmp(start_room.connections[x], room[y].name) == 0 && not_on_the_list(search.the_list, room[y].name) == 1)
+				if(ft_strcmp(start_room.connections[x], room[y].name) == 0 && not_on_the_list(search, room[y].name) == 1)
 				{
 					if (search.found_end == 0)
 					{
-						search.the_list = ft_strjoin(search.the_list, room[y].name);
-						search.the_list = ft_strjoin(search.the_list, " ");
+						search.the_list = ft_addstr(search.the_list, room[y].name, search.list_len);
+						search.list_len++;
 						search = search_path(room, room[y], search, room_count);
 					}
 				}
@@ -76,6 +75,7 @@ t_search	find_path(t_rooms *room, int room_count)
 	int			x;
 	int			links;
 
+	search.list_len = 0;
 	search.links = 0;
 	search.found_end = 0;
 	links = 0;
@@ -86,12 +86,10 @@ t_search	find_path(t_rooms *room, int room_count)
 			start_room = room[x];
 		x++;
 	}
-	search.the_list = (char*)malloc(sizeof(char*) * ft_strlen(start_room.name));
-	ft_strcpy(search.the_list, start_room.name);
-	search.the_list = ft_strjoin(search.the_list, " ");
+	search.the_list = ft_addstr(search.the_list, start_room.name, search.list_len);
+	search.list_len++;
 	search = search_path(room, start_room, search, room_count);
 	if (search.found_end == 0)
 			error_master5000("FOUND NO END");
 	return (search);
-
 }

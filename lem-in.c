@@ -88,6 +88,10 @@ int			main(int ac, char **av)
 	t_rooms		*room;
 	t_search	search;
 	t_2d_ptr	file;
+	// t_malloc_ptrs head;
+
+	// head = malloc(sizeof(t_malloc_ptrs));
+	// head->next = NULL;
 
 	room = NULL;
 	room_count = 0;

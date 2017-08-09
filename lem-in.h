@@ -32,7 +32,8 @@ typedef struct	s_search
 	int found_end;
 	int links;
 	char *end_name;
-	char *the_list;
+	int list_len;
+	char **the_list;
 }				t_search;
 
 typedef struct 	s_path
@@ -52,6 +53,13 @@ typedef struct s_2d_ptr
 	int		has_finish;
 }				t_2d_ptr;
 
+
+typedef struct	s_malloc_ptrs
+{
+	char *ptr;
+	struct s_malloc_ptrs *next;
+}				t_malloc_ptrs;
+
 void		free_2d_char(char **data, int length);
 char		*ft_strmake(char *string);
 t_rooms		*alloc_rooms(t_rooms *room, int room_count);
@@ -69,7 +77,7 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room);
 t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count);
 t_rooms		check_link(t_rooms *room, char** split, int x);
 t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count);
-int			not_on_the_list(char *the_list, char *name);
+int			not_on_the_list(t_search search, char *name);
 t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_count);
 t_search	search_path(t_rooms *room, t_rooms start_room, t_search search, int room_count);
 t_search	find_path(t_rooms *room, int room_count);

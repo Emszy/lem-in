@@ -22,7 +22,7 @@
 # include <wchar.h>
 
 # define MAX_INT 2147483647
-# define BUFF_SIZE 16
+# define BUFF_SIZE 128
 
 typedef	struct		s_list
 {

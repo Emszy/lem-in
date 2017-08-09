@@ -1,30 +1,15 @@
 #include "lem-in.h"
 
-int 		path_length(t_search search)
-{
-	char	**split;
-	int		x;
-
-	x = 0;
-	split = ft_strsplit(search.the_list, ' ');
-	while (split[x])
-		x++;
-	return (x);
-}
-
 t_path 		*make_path(t_search search)
 {
 	t_path	*path;
-	char	**split;
 	int		x;
 
 	x = 0;
-	split = ft_strsplit(search.the_list, ' ');
-	path = malloc(sizeof(t_path) * path_length(search));
-	while (split[x])
+	path = malloc(sizeof(t_path) * search.list_len);
+	while (x < search.list_len)
 	{
-		path[x].name = malloc(sizeof(char *) * ft_strlen(split[x]));
-		ft_strcpy(path[x].name, split[x]);
+		path[x].name = ft_strmake(search.the_list[x]);
 		if (x == 0)
 			path[x].is_start = 1;
 		else
@@ -69,7 +54,7 @@ void		send_ants(t_search search, int ants)
 	int		ant_count;
 	t_path 	*path;
 	
-	length = path_length(search);
+	length = search.list_len;
 	x = 0;
 	start_ant = 0;
 	ant_count = ants;
@@ -87,6 +72,4 @@ void		send_ants(t_search search, int ants)
 		ant_count--;
 		path[x].ants = start_ant;
 	}
-	ft_strdel(&search.end_name);
-	ft_strdel(&search.the_list);
 }

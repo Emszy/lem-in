@@ -58,10 +58,10 @@ static int		read_line(int fd, char **buff, char **line)
 
 int				get_next_line(int const fd, char **line)
 {
-	static char		*buff[4096];
+	static char		*buff[2048];
 	int				res;
 
-	if (!line || fd < 0 || fd > 4096  )
+	if (!line || fd < 0 || fd > 2048)
 		return (-1);
 	if (buff[fd] && validate_buffer(&buff[fd], line))
 		return (1);

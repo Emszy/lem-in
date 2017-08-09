@@ -23,6 +23,7 @@ t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 			}
 		}
 	}
+	free(split);
 	return (room);
 }
 
@@ -58,5 +59,7 @@ t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count)
 				room[x] = check_link(room, split, x);
 		}
 	}
+	free(split);
+
 	return (room);
 }
