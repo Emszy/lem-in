@@ -30,16 +30,12 @@ static int		validate_buffer(char **buff, char **line)
 static int		read_line(int fd, char **buff, char **line)
 {
 	char			bfr[BUFF_SIZE + 1];
-	int				bytes_read;
+	int				bytes;
 	char			*tmp;
 
-	if (read(fd, bfr, 0) < 0)
-		return (-1);
-	while ((bytes_read = read(fd, bfr, BUFF_SIZE)))
+	while ((bytes = read(fd, bfr, BUFF_SIZE)) > 0)
 	{
-		if (bytes_read == -1)
-			return (-1);
-		bfr[bytes_read] = '\0';
+		bfr[bytes] = '\0';
 		tmp = NULL;
 		if (*buff)
 		{
@@ -53,24 +49,27 @@ static int		read_line(int fd, char **buff, char **line)
 		if (validate_buffer(buff, line))
 			return (1);
 	}
+	if (bytes == -1)
+		return (-1);
 	return (0);
 }
 
 int				get_next_line(int const fd, char **line)
 {
-	static char		*buff[2048];
-	int				res;
+	static char		*buff;
+	int				ret;
 
-	if (!line || fd < 0 || fd > 2048)
+	if (!line || fd < 0)
 		return (-1);
-	if (buff[fd] && validate_buffer(&buff[fd], line))
+	if (buff && validate_buffer(&buff, line))
 		return (1);
-	res = read_line(fd, &buff[fd], line);
-	if (res != 0)
-		return (res);
-	if (buff[fd] == NULL || buff[fd][0] == '\0')
+	ret = read_line(fd, &buff, line);
+	if (ret)
+		return (ret);
+	if (buff == NULL)
 		return (0);
-	*line = buff[fd];
-	buff[fd] = NULL;
+	*line = buff;
+	buff = NULL;
 	return (1);
 }
+

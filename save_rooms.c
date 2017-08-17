@@ -69,13 +69,14 @@ t_rooms		*check_for_hash(t_2d_ptr *file, t_rooms *room)
 	return(room);
 }
 
-t_rooms		*room_info(char** split, t_rooms *room, int x)
+t_rooms		room_info(char** split, t_rooms room)
 {
+
 	check_for_letters(split[1]);
 	check_for_letters(split[2]);
-	room[x].name = ft_strmake(split[0]);
-	room[x].x = ft_atoi(split[1]);
-	room[x].y = ft_atoi(split[2]);
+	room.name = ft_strmake(split[0]);
+	room.x = ft_atoi(split[1]);
+	room.y = ft_atoi(split[2]);
 	return (room);
 }
 
@@ -88,7 +89,7 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room)
 
 	n = 0;
 	x = 0;
-	y = 0;
+	y = -1;
 	room = check_for_hash(&file, room);
 	while (++y < file.length)
 	{	
@@ -100,7 +101,15 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room)
 				n++;
 			if (n > 3)
 				error_master5000("ERROR TOO MANY COORDS");
-			room = room_info(split, room, x++);
+			room[x] = room_info(split, room[x]);
+			x++;
+			n = 0;
+			while(split[n])
+			{
+				free(split[n]);
+				n++;
+			}
+			free(split);
 		}
 	}
 	if (file.has_finish != 1 || file.has_start != 1)

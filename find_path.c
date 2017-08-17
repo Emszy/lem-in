@@ -30,7 +30,7 @@ t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_
 				if (room[y].end == 1 || start_room.end == 1)
 				{
 					search.found_end = 1;
-					search.the_list = ft_addstr(search.the_list, room[y].name, search.list_len);
+					search.the_list = ft_paragraph(search.the_list, room[y].name, search.list_len);
 					search.list_len++;
 					return (search);
 				}
@@ -58,13 +58,14 @@ t_search	search_path(t_rooms *room, t_rooms start_room, t_search search, int roo
 				{
 					if (search.found_end == 0)
 					{
-						search.the_list = ft_addstr(search.the_list, room[y].name, search.list_len);
+						search.the_list = ft_paragraph(search.the_list, room[y].name, search.list_len);
 						search.list_len++;
 						search = search_path(room, room[y], search, room_count);
 					}
 				}
 			}
 		}
+
 	return (search);
 }
 

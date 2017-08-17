@@ -21,9 +21,15 @@ t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 				if (ft_strcmp(split[1], room[x].name) == 0)
 					room[x].links++;
 			}
+			x = 0;
+			while(split[x])
+			{
+				free(split[x]);
+				x++;
+			}
+			free(split);
 		}
 	}
-	free(split);
 	return (room);
 }
 
@@ -47,7 +53,9 @@ t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count)
 	char	**split;
 	int		x;
 	int		y;
+	int		n;
 
+	n = 0;
 	y = -1;
 	while (++y < file.length)
 	{
@@ -57,9 +65,14 @@ t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count)
 			split = ft_strsplit(file.data[y], '-');
 			while (++x < room_count)
 				room[x] = check_link(room, split, x);
+			n = 0;
+			while(split[n])
+			{
+				free(split[n]);
+				n++;
+			}
+			free(split);
 		}
 	}
-	free(split);
-
 	return (room);
 }

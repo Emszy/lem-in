@@ -11,7 +11,11 @@ t_path 		*make_path(t_search search)
 	{
 		path[x].name = ft_strmake(search.the_list[x]);
 		if (x == 0)
+		{
 			path[x].is_start = 1;
+			path[x].ants  = 0;
+			path[x].is_end = 0;
+		}
 		else
 		{
 			path[x].is_start = 0;
@@ -58,6 +62,7 @@ void		send_ants(t_search search, int ants)
 	x = 0;
 	start_ant = 0;
 	ant_count = ants;
+	path = NULL;
 	path = make_path(search);
 	while (path[length - 1].ants < ants)
 	{
@@ -72,4 +77,12 @@ void		send_ants(t_search search, int ants)
 		ant_count--;
 		path[x].ants = start_ant;
 	}
+
+x = 0;
+	while (x < search.list_len)
+	{
+		free(path[x].name);
+		x++;
+	}
+	free(path);
 }
