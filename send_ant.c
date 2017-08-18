@@ -1,6 +1,6 @@
 #include "lem-in.h"
 
-t_path 		*make_path(t_search search)
+t_path		*make_path(t_search search)
 {
 	t_path	*path;
 	int		x;
@@ -50,20 +50,15 @@ void 		show_ant_path(t_path *path, int length)
 		printf("\n");
 }
 
-void		send_ants(t_search search, int ants)
+void		march_ants(t_path *path, int length, int ants)
 {
-	int		x;
-	int		length;
 	int		start_ant;
 	int		ant_count;
-	t_path 	*path;
-	
-	length = search.list_len;
-	x = 0;
+	int		x;
+
 	start_ant = 0;
+	x = 0;
 	ant_count = ants;
-	path = NULL;
-	path = make_path(search);
 	while (path[length - 1].ants < ants)
 	{
 		start_ant++;
@@ -77,8 +72,19 @@ void		send_ants(t_search search, int ants)
 		ant_count--;
 		path[x].ants = start_ant;
 	}
+}
 
-x = 0;
+void		send_ants(t_search search, int ants)
+{
+	int		x;
+	int		length;
+	t_path 	*path;
+	
+	length = search.list_len;
+	x = 0;
+	path = NULL;
+	path = make_path(search);
+	march_ants(path, length, ants);
 	while (x < search.list_len)
 	{
 		free(path[x].name);

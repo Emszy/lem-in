@@ -49,6 +49,12 @@ typedef struct		s_flags
 	int z;
 }					t_flags;
 
+void				free_2d_char(char **data, int length);
+int					error_master5000(char *message);
+char				*ft_strmake(char *string);
+char				**malloc_list(char *string);
+char				**ft_addstr(char **list, char *string, int size);
+char				**ft_paragraph(char **list, char *string, int size);
 t_list				*ft_lstmap(t_list*lst, t_list *(*f)(t_list *elem));
 void				ft_lstiter(t_list *lst, void(*f)(t_list *elem));
 void				ft_lstadd(t_list **alst, t_list *new);

@@ -4,7 +4,6 @@ FLAGS = -Wall -Wextra -Werror -g
 
 SRC =	\
 		lem-in.c \
-		str.c \
 		misc.c \
 		save_rooms.c \
 		save_links.c \
@@ -13,7 +12,6 @@ SRC =	\
 
 INPUT_OBJ =	\
 		lem-in.o \
-		str.o \
 		misc.o \
 		save_rooms.o \
 		save_links.o \

@@ -3,6 +3,9 @@ NAME = libft.a
 CC = gcc
 
 SRCS =	\
+		ft_free_2d.c \
+		error_check.c \
+		ft_paragraph.c \
 		ft_putchar.c \
 		ft_putstr.c \
 		ft_putnbr.c \
@@ -79,6 +82,9 @@ SRCS =	\
 		pointers.c \
 
 OBJS =	\
+		ft_free_2d.o \
+		error_check.o \
+		ft_paragraph.o \
 		ft_putchar.o \
 		ft_putstr.o \
 		ft_putnbr.o \

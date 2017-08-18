@@ -54,20 +54,7 @@ typedef struct s_2d_ptr
 	int		has_finish;
 }				t_2d_ptr;
 
-
-typedef struct	s_malloc_ptrs
-{
-	char *ptr;
-	struct s_malloc_ptrs *next;
-}				t_malloc_ptrs;
-
-void		free_2d_char(char **data, int length);
-char		*ft_strmake(char *string);
 t_rooms		*alloc_rooms(t_rooms *room, int room_count);
-char		**malloc_list(char *string);
-char		**ft_addstr(char **list, char *string, int size);
-char	**ft_paragraph(char **list, char *string, int size);
-int			error_master5000(char *message);
 int			check_for_letters(char *string);
 t_rooms		*init_rooms(t_rooms *room, int room_count);
 void		print_room(t_rooms *room, int room_count);
@@ -88,10 +75,5 @@ t_path 		*make_path(t_search search);
 t_path 		*move_ant(t_path *path, int x);
 void 		show_ant_path(t_path *path, int length);
 void		send_ants(t_search search, int ants);
-
-
-
-
-
 
 #endif

@@ -22,12 +22,7 @@ t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 					room[x].links++;
 			}
 			x = 0;
-			while(split[x])
-			{
-				free(split[x]);
-				x++;
-			}
-			free(split);
+			free_2d_char(split, 2);
 		}
 	}
 	return (room);

@@ -1,6 +1,6 @@
 #include "lem-in.h"
 
-int		get_ant_count(t_2d_ptr file)
+int			get_ant_count(t_2d_ptr file)
 {
 	int		ants;
 	int		x;
@@ -71,12 +71,19 @@ t_rooms		*check_for_hash(t_2d_ptr *file, t_rooms *room)
 
 t_rooms		room_info(char** split, t_rooms room)
 {
+	int		n;
 
+	n = 0;
+	while (split[n])
+		n++;
+	if (n > 3)
+		error_master5000("ERROR TOO MANY COORDS");
 	check_for_letters(split[1]);
 	check_for_letters(split[2]);
 	room.name = ft_strmake(split[0]);
 	room.x = ft_atoi(split[1]);
 	room.y = ft_atoi(split[2]);
+	free_2d_char(split, n);
 	return (room);
 }
 
@@ -84,10 +91,8 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room)
 {
 	int		x;
 	int		y;
-	int		n;
 	char	**split;
 
-	n = 0;
 	x = 0;
 	y = -1;
 	room = check_for_hash(&file, room);
@@ -95,21 +100,9 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room)
 	{	
 		if (ft_strchr(file.data[y], ' ') && ft_strchr(file.data[y], '#') == NULL)
 		{
-			n = 0;
 			split = ft_strsplit(file.data[y], ' ');
-			while (split[n])
-				n++;
-			if (n > 3)
-				error_master5000("ERROR TOO MANY COORDS");
 			room[x] = room_info(split, room[x]);
 			x++;
-			n = 0;
-			while(split[n])
-			{
-				free(split[n]);
-				n++;
-			}
-			free(split);
 		}
 	}
 	if (file.has_finish != 1 || file.has_start != 1)

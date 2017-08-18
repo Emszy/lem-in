@@ -1,4 +1,4 @@
-#include "lem-in.h"
+#include "libft.h"
 
 char	*ft_strmake(char *string)
 {
@@ -9,7 +9,6 @@ char	*ft_strmake(char *string)
 	new[ft_strlen(string) + 1] = '\0';
 	return(new);
 }
-
 
 char	**malloc_list(char *string)
 {

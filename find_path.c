@@ -1,17 +1,16 @@
 #include "lem-in.h"
 
-int			not_on_the_list(t_search search, char *name)
+int			on_list(t_search search, char *name)
 {
 	int		x;
 
 	x = -1;
-
 	while (++x < search.list_len)
 	{
 		if (ft_strcmp(search.the_list[x], name) == 0)
-			return (0);
+			return (1);
 	}
-	return (1);
+	return (0);
 }
 
 t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_count)
@@ -40,38 +39,38 @@ t_search	check_end(t_rooms *room, t_rooms start_room, t_search search, int room_
 	return (search);
 }
 
-t_search	search_path(t_rooms *room, t_rooms start_room, t_search search, int room_count)
+t_search	search_path(t_rooms *room, t_rooms start_room, t_search s, int room_count)
 {
 	int		x;
 	int		y;
 
 	x = -1;
-	search = check_end(room, start_room, search, room_count);
-		while (++x < start_room.links)
+	s = check_end(room, start_room, s, room_count);
+	while (++x < start_room.links)
+	{
+		y = -1;
+		while(++y < room_count)
 		{
-			y = -1;
-			while(++y < room_count)
+			if (s.found_end == 1)
+				return (s);
+			if (ft_strcmp(start_room.connections[x], room[y].name) == 0
+				&& on_list(s, room[y].name) == 0)
 			{
-				if (search.found_end == 1)
-					return (search);
-				if(ft_strcmp(start_room.connections[x], room[y].name) == 0 && not_on_the_list(search, room[y].name) == 1)
+				if (s.found_end == 0)
 				{
-					if (search.found_end == 0)
-					{
-						search.the_list = ft_paragraph(search.the_list, room[y].name, search.list_len);
-						search.list_len++;
-						search = search_path(room, room[y], search, room_count);
-					}
+					s.the_list = ft_paragraph(s.the_list, room[y].name, s.list_len);
+					s.list_len++;
+					s = search_path(room, room[y], s, room_count);
 				}
 			}
 		}
-
-	return (search);
+	}
+	return (s);
 }
 
 t_search	find_path(t_rooms *room, int room_count)
 {
-	t_rooms		start_room;
+	t_rooms		start;
 	t_search	search;
 	int			x;
 	int			links;
@@ -84,12 +83,12 @@ t_search	find_path(t_rooms *room, int room_count)
 	while (x < room_count)
 	{
 		if (room[x].start == 1)
-			start_room = room[x];
+			start = room[x];
 		x++;
 	}
-	search.the_list = ft_addstr(search.the_list, start_room.name, search.list_len);
+	search.the_list = ft_addstr(search.the_list, start.name, search.list_len);
 	search.list_len++;
-	search = search_path(room, start_room, search, room_count);
+	search = search_path(room, start, search, room_count);
 	if (search.found_end == 0)
 			error_master5000("FOUND NO END");
 	return (search);
