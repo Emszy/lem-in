@@ -91,17 +91,14 @@ t_search	find_path(t_rooms *room, int room_count)
 	search.links = 0;
 	search.found_end = 0;
 	links = 0;
-	x = 0;
-	while (x < room_count)
-	{
+	x = -1;
+	while (++x < room_count)
 		if (room[x].start == 1)
 			start = room[x];
-		x++;
-	}
 	search.the_list = ft_addstr(search.the_list, start.name, search.list_len);
 	search.list_len++;
 	search = search_path(room, start, search, room_count);
 	if (search.found_end == 0)
-			error_master5000("FOUND NO END");
+			error_master5000("ERROR");
 	return (search);
 }

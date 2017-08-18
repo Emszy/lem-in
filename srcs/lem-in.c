@@ -30,7 +30,7 @@ t_2d_ptr	save_input()
 		x++;
 	}
 	if (x <= 1)
-		error_master5000("NO GOOD");
+		error_master5000("ERROR");
 	file.length = x;
 	return (file);
 }
@@ -47,7 +47,7 @@ t_2d_ptr	save_file(char *filename)
 	y = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd <= 0)
-		error_master5000("NO GOOD");
+		error_master5000("ERROR");
 	while (get_next_line(fd, &line))
 	{
 		file.data = ft_addstr(file.data, line, x);
@@ -55,7 +55,7 @@ t_2d_ptr	save_file(char *filename)
 		x++;
 	}
 	if (x <= 1)
-		error_master5000("NO GOOD");
+		error_master5000("ERROR");
 	file.length = x;
 	return (file);
 }
@@ -104,7 +104,7 @@ int			main(int ac, char **av)
 			room_count = get_room_count(file);
 			room = (t_rooms *)malloc(sizeof(t_rooms) * room_count);
 			if (!room)
-				error_master5000("NO SPACE");
+				error_master5000("ERROR");
 			room = prep_rooms(room, file, room_count);
 			search = find_path(room, room_count);
 			send_ants(search, ants);

@@ -30,7 +30,7 @@ int check_for_letters(char *string)
 	while (string[x])
 	{
 		if (!ft_isdigit(string[x]))
-			error_master5000("letter in the num");
+			error_master5000("ERROR");
 		x++;
 	}
 	return (1);

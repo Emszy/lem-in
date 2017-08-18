@@ -24,7 +24,7 @@ int			get_ant_count(t_2d_ptr file)
 	check_for_letters(file.data[x]);
 	ants = ft_atoi(file.data[x]);
 	if (ants <= 0)
-		error_master5000("no ants");
+		error_master5000("ERROR");
 	return (ants);
 }
 
@@ -40,7 +40,7 @@ int			get_room_count(t_2d_ptr file)
 		if (ft_strcmp(file.data[x], "##start") == 0)
 		{
 			if (ft_strchr(file.data[x + 1], '-'))
-				error_master5000("NO START");
+				error_master5000("ERROR");
 			x++;
 		}
 		if (ft_strchr(file.data[x], ' ') && ft_strchr(file.data[x], '#') == NULL)
@@ -89,7 +89,7 @@ t_rooms		room_info(char** split, t_rooms room)
 	while (split[n])
 		n++;
 	if (n > 3)
-		error_master5000("ERROR TOO MANY COORDS");
+		error_master5000("ERROR");
 	check_for_letters(split[1]);
 	check_for_letters(split[2]);
 	room.name = ft_strmake(split[0]);
@@ -118,6 +118,6 @@ t_rooms		*save_rooms(t_2d_ptr file, t_rooms *room)
 		}
 	}
 	if (file.has_finish != 1 || file.has_start != 1)
-		error_master5000("NO START  || FINISH ERROR");
+		error_master5000("ERROR");
 	return (room);
 }
