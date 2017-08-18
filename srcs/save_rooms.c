@@ -86,10 +86,6 @@ t_rooms		room_info(char** split, t_rooms room)
 	int		n;
 
 	n = 0;
-	while (split[n])
-		n++;
-	if (n > 3)
-		error_master5000("ERROR");
 	check_for_letters(split[1]);
 	check_for_letters(split[2]);
 	room.name = ft_strmake(split[0]);

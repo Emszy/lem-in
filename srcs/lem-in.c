@@ -35,6 +35,53 @@ t_2d_ptr	save_input()
 	return (file);
 }
 
+int check_line(char *line, int found_ant)
+{
+	int space;
+	int dash;
+	int hash;
+	int comment;
+	int x = 0;
+	char **split;
+
+	comment = 0;
+	space = 0;
+	dash = 0;
+	hash = 0;
+
+	if (line[0] == 'L')
+		error_master5000("Error");
+	if (ft_strchr(line, ' '))
+	{	
+		split = ft_strsplit(line, ' ');
+		while (split[x])
+			x++;
+		free_2d_char(split, x);
+		if (x != 3)
+			error_master5000("ERROR SPLIT");
+		space = 1;
+	}
+	if (ft_strchr(line, '-'))
+	{
+		split = ft_strsplit(line, '-');
+		while (split[x])
+			x++;
+		free_2d_char(split, x);
+		if (x != 2)
+			error_master5000("ERROR DASH");
+		dash = 1;
+	}
+	if (line[0] == '#')
+		comment = 1;
+	if (line[0] == '#' && line[1] == '#')
+		hash = 1;
+	if (space && dash)
+		error_master5000("ERROR");
+	if (space == 0 && dash == 0 && hash == 0 && comment == 0 && check_for_letters(line) && found_ant == 0)
+		return(1);
+	return (found_ant);
+}
+
 t_2d_ptr	save_file(char *filename)
 {
 	char		*line;
@@ -42,7 +89,9 @@ t_2d_ptr	save_file(char *filename)
 	int			fd;
 	int			x;
 	int			y;
+	int			found_ant;
 
+	found_ant = 0;
 	x = 0;
 	y = 0;
 	fd = open(filename, O_RDONLY);
@@ -50,6 +99,7 @@ t_2d_ptr	save_file(char *filename)
 		error_master5000("ERROR");
 	while (get_next_line(fd, &line))
 	{
+		found_ant = check_line(line, found_ant);
 		file.data = ft_addstr(file.data, line, x);
 		free(line);
 		x++;
