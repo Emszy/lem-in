@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "../lem-in.h"
 
 int			on_list(t_search search, char *name)
 {

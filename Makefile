@@ -3,12 +3,12 @@ NAME = lem-in
 FLAGS = -Wall -Wextra -Werror -g
 
 SRC =	\
-		lem-in.c \
-		misc.c \
-		save_rooms.c \
-		save_links.c \
-		find_path.c \
-		send_ant.c
+		srcs/lem-in.c \
+		srcs/misc.c \
+		srcs/save_rooms.c \
+		srcs/save_links.c \
+		srcs/find_path.c \
+		srcs/send_ant.c
 
 INPUT_OBJ =	\
 		lem-in.o \

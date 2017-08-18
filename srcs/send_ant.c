@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "../lem-in.h"
 
 t_path		*make_path(t_search search)
 {

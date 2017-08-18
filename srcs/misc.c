@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "../lem-in.h"
 
 t_rooms		*alloc_rooms(t_rooms *room, int room_count)
 {

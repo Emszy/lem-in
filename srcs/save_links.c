@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "../lem-in.h"
 
 t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 {
