@@ -42,14 +42,6 @@ t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 
 t_rooms		check_link(t_rooms *room, char** split, int x)
 {
-	int n;
-
-	n = 0;
-	while(split[n])
-		n++;
-	if (n != 2)
-		error_master5000("ERRORR");
-
 	if (ft_strcmp(split[0], room[x].name) == 0)
 	{
 		room[x].connections[room[x].index] = ft_strmake(split[1]);

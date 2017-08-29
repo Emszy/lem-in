@@ -54,6 +54,9 @@ typedef struct s_2d_ptr
 	int		has_finish;
 }				t_2d_ptr;
 
+#define INT_MAX 2147483647
+#define INT_MIN -2147483648
+long		ft_ltoi(const char *str);
 t_rooms		*alloc_rooms(t_rooms *room, int room_count);
 int			check_for_letters(char *string);
 t_rooms		*init_rooms(t_rooms *room, int room_count);
