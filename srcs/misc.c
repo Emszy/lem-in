@@ -22,7 +22,7 @@ t_rooms		*alloc_rooms(t_rooms *room, int room_count)
 	return (room);
 }
 
-int check_for_letters(char *string)
+int			check_for_letters(char *string)
 {
 	int x;
 
@@ -30,13 +30,13 @@ int check_for_letters(char *string)
 	while (string[x])
 	{
 		if (!ft_isdigit(string[x]))
-			error_master5000("ERROR");
+			error_master5000("ERROR LETTER IN NUM");
 		x++;
 	}
 	return (1);
 }
 
-t_rooms *init_rooms(t_rooms *room, int room_count)
+t_rooms		*init_rooms(t_rooms *room, int room_count)
 {
 	int x;
 
@@ -54,4 +54,29 @@ t_rooms *init_rooms(t_rooms *room, int room_count)
 		x++;
 	}
 	return (room);
+}
+
+void		usage(int ac)
+{
+	if (ac > 2)
+	{
+		ft_printf("Usage:\n");
+		ft_printf("\t./lem-in\n");
+		ft_printf("or\n");
+		error_master5000("./lem-in map_goes_here");
+	}
+}
+
+void		free_lemons(t_rooms *room, t_search search, t_2d_ptr file, int room_count)
+{
+	int x = -1;
+
+	free_2d_char(search.the_list, search.list_len);
+	free_2d_char(file.data, file.length);
+	while (++x < room_count)
+	{
+		free(room[x].name);
+		free_2d_char(room[x].connections, room[x].links);
+	}
+	free(room);
 }

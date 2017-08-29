@@ -33,7 +33,6 @@ t_rooms		*get_link_count(t_2d_ptr file, t_rooms *room, int room_count)
 				if (ft_strcmp(split[1], room[x].name) == 0)
 					room[x].links++;
 			}
-			x = 0;
 			free_2d_char(split, 2);
 		}
 	}
@@ -67,7 +66,7 @@ t_rooms		*get_link_names(t_2d_ptr file, t_rooms *room, int room_count)
 	while (++y < file.length)
 	{
 		if (ft_strlen(file.data[y]) == 0 && y != file.length - 1)
-			error_master5000("ERROR");
+			error_master5000("ERROR NOT ENOUGH DATA");
 		x = -1;
 		if (ft_strchr(file.data[y], '-'))
 		{

@@ -56,7 +56,13 @@ typedef struct s_2d_ptr
 
 #define INT_MAX 2147483647
 #define INT_MIN -2147483648
-long		ft_ltoi(const char *str);
+
+void		free_lemons(t_rooms *room, t_search search, t_2d_ptr file, int room_count);
+void		usage(int ac);
+int			split_count(char c, char *line, int count);
+void		check_for_l_and_spaces(char *line);
+int			check_line(char *line, int found_ant);
+void		check_dup(t_rooms *room, int room_count);
 t_rooms		*alloc_rooms(t_rooms *room, int room_count);
 int			check_for_letters(char *string);
 t_rooms		*init_rooms(t_rooms *room, int room_count);
